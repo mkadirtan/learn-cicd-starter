@@ -10,6 +10,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: auth
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+
+      - name: Setup Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+
       - name: Check out code
         uses: actions/checkout@v4
 
@@ -20,3 +29,6 @@ jobs:
 
       - name: Build
         run: ./scripts/buildprod.sh
+
+      - name: Upload Artifact
+        run: gcloud builds submit --tag us-central1-docker.pkg.dev/notely-421120/notely-ar-repo/notely:latest .
